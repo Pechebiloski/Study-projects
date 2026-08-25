@@ -113,7 +113,7 @@ body {
     font-size: 1.2rem;
     color: aliceblue;
     position: relative;
-    transition: box-shadow 0.2 ease;
+    transition: box-shadow 0.2s ease;
 }
 
 #task-list li:hover {
@@ -131,7 +131,11 @@ body {
     transition: all 0.2s ease;
 }
 
-#task-list li .checkbox::before {
+#task-list li .checkbox:checked {
+    background: rgb(78, 182, 213);
+}
+
+#task-list li .checkbox:checked::before {
     content: '\2713';
     color: aliceblue;
     display: flex;
@@ -142,14 +146,21 @@ body {
 
 #task-list li span {
     flex: 1;
-    margin-left: 10px;
+    margin-left: 15px;
     word-wrap: break-word;
+}
+
+#task-list li.completed span {
+     text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: black;
+    color: black;
 }
 
 .task-buttons {
     display: flex;
     gap: 10px;
-    margin-right: auto;
+    margin-left: 20px;
 }
 
 .task-buttons button {
@@ -177,9 +188,4 @@ body {
 
 .task-buttons .delete-btn {
      background: rgb(230, 44, 106);
-}
-
-#task-list li.completed span {
-    text-decoration: 2px line-through black;
-    color: black;
 }

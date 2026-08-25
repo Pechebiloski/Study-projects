@@ -34,10 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
       
       li.innerHTML = `
       <input type="checkbox" class="checkbox" $ {completed ? 'checked' : ''} />
+      
       <span>${taskText}</span>
+      
       <div class="task-buttons">
-        <button class="edit-btn"><i class="fa-solid fa-pen"></i></button>
-        <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
+
+        <button class="edit-btn">
+        <i class="fa-solid fa-pen"></i>
+        </button>
+
+        <button class="delete-btn">
+        <i class="fa-solid fa-trash"></i>
+        </button>
+        
         </div>
       `;
 
@@ -45,6 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const editBtn = li.querySelector('.edit-btn');
 
+        const deleteBtn = li.querySelector('.delete-btn');
+
+        deleteBtn.addEventListener('click', () => {
+             li.remove();
+             toggleFinishState();
+        });
+        
+        
         if (completed) {
             li.classList.add('completed');
             editBtn.disabled = true;
@@ -54,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         checkbox.addEventListener('change', () => {
+            
             const isChecked = checkbox.checked;
             
             li.classList.toggle('completed', isChecked);
@@ -67,7 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         editBtn.addEventListener('click', () => {
+
             if(!checkbox.checked) {
+
                 taskInput.value = li.querySelector('span').textContent;
                 li.remove();
                 toggleFinishState();
@@ -75,34 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
 
+        taskList.appendChild(li);
 
-        li.querySelector('.delete-btn'),
-        addEventListener('click', () => {
-            li.remove()
-            toggleFinishState();
-        });
+        taskInput.value = '';
 
+        toggleFinishState();
 
-      taskList.appendChild(li);
-      taskInput.value = '';
-      toggleFinishState();
     };
 
 
+    const form = document.querySelector('.input-area');
 
-   const form = document.querySelector('.input-area');
+    form.addEventListener('submit', (event) => {
 
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    addTask();
-});
+        event.preventDefault();
 
-    taskInput.addEventListener('keypress', (e) => {
-        if(e.key == 'Enter') {
-            e.preventDefault();
-            addTask();
-        }
+        addTask();
+
     });
-
 
 });
