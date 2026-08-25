@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById ('task-list');
     const finish = document.querySelector('.finish');
     const todosContainer = document.querySelector('.todos-container');
-
+    const progressBar = document.getElementById('progress');
+    const progressNumbers = document.getElementById('numbers');
 
 
     const toggleFinishState = () => {
@@ -14,7 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         todosContainer.style.width = taskList.children.length > 0 ? '100%' : '50%';
     };
     
-    
+    const updateProgress = () => {
+    const totalTasks = taskList.children.length;
+    const completedTasks = taskList.querySelectorAll('.checkbox:checked').length;
+
+    progressBar.style.width = totalTasks
+        ? `${(completedTasks / totalTasks) * 100}%`
+        : '0%';
+
+    progressNumbers.textContent = `${completedTasks} / ${totalTasks}`;
+};
     
     const addTask = (text, completed = false) => {
 
@@ -25,10 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
 
       }
-
-
-
-
 
       const li = document.createElement('li');
       
@@ -59,11 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteBtn.addEventListener('click', () => {
              li.remove();
              toggleFinishState();
+             updateProgress();
         });
         
         
         if (completed) {
             li.classList.add('completed');
+
             editBtn.disabled = true;
             editBtn.style.opacity = '0.5';
             editBtn.style.pointerEvents = 'none';
@@ -80,7 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             editBtn.style.opacity = isChecked ? '0.5' : '1';
            
-            editBtn.style.pointerEvents = isChecked ? 'none' : 'auto'
+            editBtn.style.pointerEvents = isChecked ? 'none' : 'auto';
+
+            updateProgress();
 
         });
 
@@ -91,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 taskInput.value = li.querySelector('span').textContent;
                 li.remove();
                 toggleFinishState();
+                updateProgress();
             }
         });
 
@@ -100,6 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         taskInput.value = '';
 
         toggleFinishState();
+
+        updateProgress();
 
     };
 
