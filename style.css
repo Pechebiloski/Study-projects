@@ -39,7 +39,7 @@ body {
     background: transparent; 
     border: none;
     font-size: 35px;
-    color: #839958;
+    color: #F7F4D5;
     text-align: right;
     pointer-events: none;
 }
@@ -48,12 +48,26 @@ body {
     color: #F7F4D5;
 }
 
+.display.active .display-input {
+    font-size: 20px;
+    color: #F7F4D5;
+    transform: translateY(-65%);
+    transition: .5s;
+}
+
 .display .display-result {
     position: absolute;
     left: 0;
-    font-size: 15px;
+    font-size: 30px;
+    color: #D3968C;
     transform: translateY(65%);
 
+}
+
+.display.active .display-result {
+    font-size: 45px;
+    transform: translateY(0);
+    transition: .5s;
 }
 
 .buttons {
@@ -86,7 +100,7 @@ body {
     font-size: 25px;
 }
 
-.buttons .operator .backspace span {
+.buttons .operator.backspace span {
     display: flex;
     align-items: center;
     width: 22px;
@@ -96,7 +110,7 @@ body {
     transform: translate(-35%, -50%) scale(.9);
 }
 
-.buttons .operator .backspace span::before {
+.buttons .operator.backspace span::before {
     content: '';
     position: absolute;
     left: -8px;
@@ -108,9 +122,9 @@ body {
 
 }
 
-.buttons .operator .backspace span::after {
+.buttons .operator.backspace span::after {
 content: 'x';
 padding-left: 1px;
-font-size: 18px;
+font-size: 20px;
 line-height: 1;
 }
