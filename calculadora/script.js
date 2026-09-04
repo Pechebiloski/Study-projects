@@ -66,12 +66,23 @@ const calculete = btnValue => {
         ) return;
        else if (lastChar === "%") input += btnValue;
        else if (isLastCharOperator) input = withoutLastChar + btnValue;
-       else input += btnValue;
+       else {
+        let lastOperatiorIndex = -1;
+        for (const operator of operators) {
+            const index = input.lastIndexOf(operator);
+            if (index > lastOperatiorIndex) lastOperatiorIndex = index;
+        }
+        if (!input.slice(lastOperatiorIndex + 1).includes("."))
+        input += btnValue;
+       }
     }
 
     else if (btnValue === ".") {
         const decimalValue = "0.";
         if (lastCalculation) resetCalculator(decimalValue);
+        else if (lastChar === ")" || lastChar === "%") input += "×" + decimalValue;
+        else if  (input === "" || isLastCharOperator || lastChar === "(") input += decimalValue;
+        else input += btnValue;
     }
 
 
@@ -87,7 +98,7 @@ const calculete = btnValue => {
     displayInput.value = input;
     displauResult.value = result;
     displayInput.scrollLeft = displayInput.scrollWidth;
-};
+}
 
 const replaceOperators = input => input.replaceAll("÷", "/").replaceAll("x", "*");
 
