@@ -25,7 +25,7 @@ const calculete = btnValue => {
 
         ) return;
 
-        const formattedInput = replaceOperators(input);
+        const formattedInput = calculatePercentage (replaceOperators(input));
         try {
             const calculeteValue = eval(formattedInput);
             result = parseFloat(calculeteValue.toFixed(10)).toString();
@@ -105,18 +105,30 @@ const calculete = btnValue => {
     }
 
        else if (btnValue === "( )") {
-        if (lastCalculation) {
-            if (isInvalidResult) 
+        const {openBrecketsCount, closeBrecketsCount } = countBrackets(input);
+          
+           if (lastCalculation) {
+                if (isInvalidResult) 
                 resetCalculator ("(")
             else 
             resetCalculator(result + "x(");
         }
 
-        else if (input === "" || isLastCharOperator && lastChar !== "%")
+        else if (input === "" || isLastCharOperator && lastChar !== "%") {
             input += "(";
-        else input += "x("
+        }
+       
+       else if ( 
+        openBrecketsCount > closeBrecketsCount && 
+        lastChar !== "(" &&
+        !isLastCharOperator
+       ) {
+         input += ")"
+       } 
+       else {
+        input += "x("
        }
-   
+}
    
        else {
         if (lastCalculation) 
@@ -128,9 +140,30 @@ const calculete = btnValue => {
     displayInput.value = input;
     displayResult.value = result;
     displayInput.scrollLeft = displayInput.scrollWidth;
-}
 
+    }
 const replaceOperators = input => input.replaceAll("÷", "/").replaceAll("x", "*");
+
+const calculatePercentage = input => {
+    return input.replace(
+         /(\d+(?:\.\d+)?)\s*([+\-*/])\s*(\d+(?:\.\d+)?)%/g,
+         (_, firstNumber, operator, porcetage) => {
+            if (operator === "+") 
+                return `${firstNumber}+(${firstNumber}*${porcetage}/100)`  
+            if (operator === "-") 
+                 return `${firstNumber}-(${firstNumber}*${porcetage}/100)`
+             if (operator === "*") 
+                return `${firstNumber}*(${firstNumber}*${porcetage}/100)`
+             if (operator === "*") 
+                return `${firstNumber}*(${firstNumber}*${porcetage}/100)`
+        
+            
+            } 
+        ).replace(
+        /(\d+(?:\.\d+)?)%/g,
+        "($1/100)"
+    );
+};
 
 const resetCalculator = newInput => {
     input = newInput;
@@ -141,12 +174,17 @@ const resetCalculator = newInput => {
 
 const countBrackets = input => {
     let openBrecketsCount = 0;
-    closeBrecketsCount = 0;
+    let closeBrecketsCount = 0;
+
     for (const char of input) {
         if (char === "(") openBrecketsCount++;
         else if (char === ")") closeBrecketsCount++;
     }
-    return (openBrecketsCount, closeBrecketsCount);
+
+    return {
+        openBrecketsCount, 
+        closeBrecketsCount
+    };
 };
 
 buttons.forEach(button => {
