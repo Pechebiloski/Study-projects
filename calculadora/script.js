@@ -133,7 +133,7 @@ const calculete = btnValue => {
        else if ( 
         openBrecketsCount > closeBrecketsCount && 
         lastChar !== "(" &&
-        !isLastCharOperator
+        (!isLastCharOperator || lastChar === "%")
        ) {
          input += ")"
        } 
