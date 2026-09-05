@@ -1,8 +1,8 @@
 const displayBox = document.querySelector(".display"),
 displayInput = document.querySelector(".display-input"),
-displauResult = document.querySelector(".display-result"),
+displayResult = document.querySelector(".display-result"),
 buttons = document.querySelectorAll("button"),
-operators = ["%", "÷", "×", "-", "+"];
+operators = ["%", "÷", "x", "-", "+"];
 let input = "",
     result = "",
     lastCalculation = false;
@@ -56,6 +56,7 @@ const calculete = btnValue => {
             if (isInvalidResult) return;
             resetCalculator(result + btnValue);
         }
+
         else if (
             (input === "" || lastChar === "(") && btnValue !== "-" ||
             input === "-" ||
@@ -64,39 +65,68 @@ const calculete = btnValue => {
             (secondToLastChar === "%" || lastChar === "%") && btnValue === "%"
 
         ) return;
-       else if (lastChar === "%") input += btnValue;
-       else if (isLastCharOperator) input = withoutLastChar + btnValue;
-       else {
+
+
+       else if (lastChar === "%") 
+        input += btnValue;
+       else if (isLastCharOperator) 
+        input = withoutLastChar + btnValue;
+
+       else 
+        input += btnValue;
+    }
+
+    else if (btnValue === ".") {
+        const decimalValue = "0.";
+
+        if (lastCalculation) 
+            resetCalculator(decimalValue);
+
+        else if (lastChar === ")" || lastChar === "%") 
+            input += "x" + decimalValue;
+
+        else if  (input === "" || isLastCharOperator || lastChar === "(") 
+            input += decimalValue;
+
+        
+        else {
         let lastOperatiorIndex = -1;
+
         for (const operator of operators) {
             const index = input.lastIndexOf(operator);
-            if (index > lastOperatiorIndex) lastOperatiorIndex = index;
+
+            if (index > lastOperatiorIndex) 
+                lastOperatiorIndex = index;
         }
+        
         if (!input.slice(lastOperatiorIndex + 1).includes("."))
         input += btnValue;
        }
     }
 
-    else if (btnValue === ".") {
-        const decimalValue = "0.";
-        if (lastCalculation) resetCalculator(decimalValue);
-        else if (lastChar === ")" || lastChar === "%") input += "×" + decimalValue;
-        else if  (input === "" || isLastCharOperator || lastChar === "(") input += decimalValue;
-        else input += btnValue;
-    }
+       else if (btnValue === "( )") {
+        if (lastCalculation) {
+            if (isInvalidResult) 
+                resetCalculator ("(")
+            else 
+            resetCalculator(result + "x(");
+        }
 
-
-
-    else { 
-      
-          if (lastCalculation) resetCalculator(btnValue);
-            else  
-            input += btnValue;
-        
-    }
+        else if (input === "" || isLastCharOperator && lastChar !== "%")
+            input += "(";
+        else input += "x("
+       }
+   
+   
+       else {
+        if (lastCalculation) 
+            resetCalculator(btnValue);
+         else 
+            input += btnValue; 
+        }
 
     displayInput.value = input;
-    displauResult.value = result;
+    displayResult.value = result;
     displayInput.scrollLeft = displayInput.scrollWidth;
 }
 
@@ -107,6 +137,16 @@ const resetCalculator = newInput => {
     result = "";
     lastCalculation = false;
     displayBox.classList.add("active");
+};
+
+const countBrackets = input => {
+    let openBrecketsCount = 0;
+    closeBrecketsCount = 0;
+    for (const char of input) {
+        if (char === "(") openBrecketsCount++;
+        else if (char === ")") closeBrecketsCount++;
+    }
+    return (openBrecketsCount, closeBrecketsCount);
 };
 
 buttons.forEach(button => {
