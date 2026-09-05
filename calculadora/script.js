@@ -5,7 +5,7 @@ buttons = document.querySelectorAll("button"),
 operators = ["%", "÷", "x", "-", "+"];
 let input = "",
     result = "",
-    lastCalculation = false;
+    lastCalculation = false,
     lastInput = "";
 
 const calculete = btnValue => {
