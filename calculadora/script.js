@@ -6,6 +6,7 @@ operators = ["%", "÷", "x", "-", "+"];
 let input = "",
     result = "",
     lastCalculation = false;
+    lastInput = "";
 
 const calculete = btnValue => {
     const lastChar = input.slice(-1),
@@ -24,6 +25,8 @@ const calculete = btnValue => {
             lastCalculation
 
         ) return;
+
+        lastInput = input;
 
         const formattedInput = calculatePercentage (replaceOperators(input));
         try {
@@ -45,11 +48,20 @@ const calculete = btnValue => {
 
     else if (btnValue === "") {
        if (lastCalculation) {
-        if (isInvalidResult) resetCalculator("");
-        resetCalculator(result.slice(0, -1));
+        if (isInvalidResult) {
+            resetCalculator("");
+       
        }
-        else input = withoutLastChar;
+        else {
+            input = lastInput.slice(0, -1);
+            result = "";
+            lastCalculation = false;
+        }
+    } 
+    else {
+    input = withoutLastChar;
     }
+}
 
     else if (operators.includes(btnValue)) {
         if (lastCalculation) {
@@ -125,6 +137,11 @@ const calculete = btnValue => {
        ) {
          input += ")"
        } 
+
+       else if (lastChar === "(") {
+        return; 
+       }
+       
        else {
         input += "x("
        }
@@ -201,3 +218,27 @@ buttons.forEach(button => {
         calculete(e.target.textContent);
     })
 });
+
+
+
+
+/* testes: 
+2 + 2 = 4 OK
+10 x 5 = 50 OK
+100 ÷ 4 = 25 OK
+50%200 = 100 OK
+200 x 50% = 100 ok
+850 - 60% = 340 ok
+850 + 60% = 1360 ok 
+850 ÷ 10% = 8500 ok 
+0.5 + 0.25 = 0.75 ok 
+(10 + 5) x 2 = 30 ok 
+10 ÷ (2 + 3) = 2 ok
+
+OBS; BOTAO DE APAGAR!!! 
+esta apagando o resultado 
+calculadora do celular volta
+na operação e apaga
+
+
+*/
