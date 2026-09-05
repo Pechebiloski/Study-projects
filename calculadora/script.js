@@ -145,21 +145,30 @@ const calculete = btnValue => {
 const replaceOperators = input => input.replaceAll("÷", "/").replaceAll("x", "*");
 
 const calculatePercentage = input => {
+
+    input = input.replace(
+        /(\d+(?:\.\d+)?)%(\d+(?:\.\d+)?)/g,
+        "($1/100)*$2"
+    );
+
+    input = input.replace(
+        /(\d+(?:\.\d+)?)\*(\d+(?:\.\d+)?)%/g,
+        "$1*($2/100)"
+    );
+
+    input = input.replace(
+        /(\d+(?:\.\d+)?)([+-])(\d+(?:\.\d+)?)%/g,
+        (_, firstNumber, operator, percentage) => {
+
+            if (operator === "+")
+                return `${firstNumber}+(${firstNumber}*${percentage}/100)`;
+
+            if (operator === "-")
+                return `${firstNumber}-(${firstNumber}*${percentage}/100)`;
+        }
+    );
+
     return input.replace(
-         /(\d+(?:\.\d+)?)\s*([+\-*/])\s*(\d+(?:\.\d+)?)%/g,
-         (_, firstNumber, operator, porcetage) => {
-            if (operator === "+") 
-                return `${firstNumber}+(${firstNumber}*${porcetage}/100)`  
-            if (operator === "-") 
-                 return `${firstNumber}-(${firstNumber}*${porcetage}/100)`
-             if (operator === "*") 
-                return `${firstNumber}*(${firstNumber}*${porcetage}/100)`
-             if (operator === "*") 
-                return `${firstNumber}*(${firstNumber}*${porcetage}/100)`
-        
-            
-            } 
-        ).replace(
         /(\d+(?:\.\d+)?)%/g,
         "($1/100)"
     );
