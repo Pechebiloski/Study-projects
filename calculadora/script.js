@@ -141,7 +141,7 @@ const calculete = btnValue => {
        else if (lastChar === "(") {
         return; 
        }
-       
+
        else {
         input += "x("
        }
@@ -239,6 +239,7 @@ OBS; BOTAO DE APAGAR!!!
 esta apagando o resultado 
 calculadora do celular volta
 na operação e apaga
-
+deu boa o botão de apagar 
+função () arrumada!!! hehehehehe
 
 */
